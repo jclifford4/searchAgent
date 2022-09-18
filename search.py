@@ -222,7 +222,7 @@ def depthFirstSearch(problem):
     :param problem:
     :return:
     """
-    DepthFirstSearch.search(problem)
+    return DepthFirstSearch.search(problem)
 
 class BreadthFirstSearch:
     """
