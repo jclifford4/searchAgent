@@ -230,7 +230,27 @@ class BreadthFirstSearch:
     """
     # Hint:  Start by setting up signatures even if you don't implement right away.
     # Python cannot compile this moudule until BFS and A* classes have at least a dummy search signature.
-    pass  # Use signatures from DepthFirstSearch
+    # Use signatures from DepthFirstSearch
+    @classmethod
+    def g(cls, node: SearchNode):
+        """
+        Fill in appropriate comments
+        """
+        raise NotImplemented()
+
+    @classmethod
+    def h(cls, node: SearchNode, problem):
+        """
+        Fill in appropriate comments
+        """
+        raise NotImplementedError()
+
+    @classmethod
+    def search(cls, problem):
+        """
+        Fill in appropriate comments
+        """
+        raise NotImplementedError()
 
 
 def breadthFirstSearch(problem):
@@ -248,7 +268,27 @@ class AStarSearch:
     """
     Expand the search tree based on a consistent heuristic
     """
-    pass  # Use signatures from DepthFirstSearch
+    # Use signatures from DepthFirstSearch
+    @classmethod
+    def g(cls, node: SearchNode):
+        """
+        Fill in appropriate comments
+        """
+        raise NotImplementedError()
+
+    @classmethod
+    def h(cls, node: SearchNode, problem):
+        """
+        Fill in appropriate comments
+        """
+        raise NotImplementedError()
+
+    @classmethod
+    def search(cls, problem):
+        """
+        Fill in appropriate comments
+        """
+        raise NotImplementedError()
 
 def aStarSearch(problem):
     """
