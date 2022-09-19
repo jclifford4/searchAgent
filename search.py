@@ -189,6 +189,7 @@ def graph_search(problem, g, h, verbose=False, debug=False):
         b = currentNode.state
         successors = problem.getSuccessors(currentNode.state)  # get its successors(its child nodes)
 
+
         # For every successor node of current node...
         for successor in successors:
 
@@ -206,6 +207,7 @@ def graph_search(problem, g, h, verbose=False, debug=False):
                     # back track the path and append to actions list
                     while child.parent != None:
                         actions.append(child.action)
+                        # print(child.g + child.h)
                         child = child.parent
                     return actions
                 else:
@@ -245,10 +247,7 @@ class DepthFirstSearch:
         Fill in appropriate comments
         """
         # print(node.state[0])
-        if (node.get_depth() == 0):
-            return 0
-
-        return -node.get_depth()
+        return -node.depth
 
 
     @classmethod
@@ -257,6 +256,8 @@ class DepthFirstSearch:
         Fill in appropriate comments
         """
 
+        if node.state == problem.startState:
+            return 0
         return -node.get_depth()
 
     @classmethod
