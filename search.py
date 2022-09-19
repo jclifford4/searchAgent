@@ -164,19 +164,63 @@ def graph_search(problem, g, h, verbose=False, debug=False):
     :param debug:  if True, print information that is helpful for debugging
     :return: list of actions to solve problem or None
     """
-    node = SearchNode(problem, problem.startState, None, None, g, h)
-    frontier = util.PriorityQueueWithFunction
-    explored = Explored().set
-    explored.add(problem)
-
-
-
-
-
     # Hint:  Maintain frontier with util.PriorityQueueWithFunction
     # sorted using one of the getter functions provided in SearchNode
 
-    raise NotImplementedError()
+    startNode = SearchNode(problem, problem.startState, None, None, g, h)
+    startNode.state = (problem.startState, None, None)
+    # q
+    frontier = util.PriorityQueue()
+    # add startNode to q
+    frontier.push(startNode, startNode.g + startNode.h)
+    done = found = False
+    # initialize empty explored set
+    explored = Explored().set
+    # explored.add(problem)
+    gs = problem.goal
+    actions = []
+
+    # while we are not done...
+    while not done:
+        currentNode = frontier.pop()        # pop first item off the q
+        explored.add(currentNode.state[0])     # mark it as explored
+
+        successors = problem.getSuccessors(currentNode.state[0])       # get its successors(its child nodes)
+
+        # For every successor node of current node...
+        for successor in successors:
+
+
+            # child node is a new SearchNode(problem, parent, curState,  action, g, h)
+            child = SearchNode(problem, successor, currentNode, successor[1], g, h)
+
+            # if child state hasn't been explored...
+            if child.state[0] not in explored:
+                # if child is the goal state...
+                if problem.isGoalState(child.state[0]):
+                    done = found = True
+                    action = child.action
+                    # actions = []    # empty list of actions.
+
+                    # back track the path and append to actions list
+                    while child.parent != None:
+
+                        actions.append(child.action)
+                        child = child.parent
+                    return actions
+                else:
+                    frontier.push(child, child.g + child.h)
+
+
+    return None
+
+
+
+
+
+
+
+
 
 
 def tinyMazeSearch(problem):
@@ -241,6 +285,7 @@ class BreadthFirstSearch:
     # Hint:  Start by setting up signatures even if you don't implement right away.
     # Python cannot compile this moudule until BFS and A* classes have at least a dummy search signature.
     # Use signatures from DepthFirstSearch
+
     @classmethod
     def g(cls, node: SearchNode):
         """
@@ -266,7 +311,8 @@ class BreadthFirstSearch:
         """
 
         path = graph_search(problem, BreadthFirstSearch.g, BreadthFirstSearch.h, True, True)
-        return None
+        path.reverse()
+        return path
 
 
 
