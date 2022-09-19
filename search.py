@@ -18,6 +18,8 @@ Pacman agents (in searchAgents.py).
 """
 from collections.abc import Callable
 
+import pacman
+import searchAgents
 import util  # util.PriorityQueueWithFunction will be useful to you
 from explored import Explored
 
@@ -162,6 +164,14 @@ def graph_search(problem, g, h, verbose=False, debug=False):
     :param debug:  if True, print information that is helpful for debugging
     :return: list of actions to solve problem or None
     """
+    node = SearchNode(problem, problem.startState, None, None, g, h)
+    frontier = util.PriorityQueueWithFunction
+    explored = Explored().set
+    explored.add(problem)
+
+
+
+
 
     # Hint:  Maintain frontier with util.PriorityQueueWithFunction
     # sorted using one of the getter functions provided in SearchNode
@@ -236,21 +246,29 @@ class BreadthFirstSearch:
         """
         Fill in appropriate comments
         """
-        raise NotImplemented()
+
+
+        return node.get_depth()
 
     @classmethod
     def h(cls, node: SearchNode, problem):
         """
         Fill in appropriate comments
         """
-        raise NotImplementedError()
+
+
+        return nullHeuristic(problem)
 
     @classmethod
     def search(cls, problem):
         """
         Fill in appropriate comments
         """
-        raise NotImplementedError()
+
+        path = graph_search(problem, BreadthFirstSearch.g, BreadthFirstSearch.h, True, True)
+        return None
+
+
 
 
 def breadthFirstSearch(problem):

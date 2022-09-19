@@ -7,7 +7,7 @@ class Explored(object):
 
     def __init__(self):
         "__init__() - Create an empty explored set"
-        raise NotImplementedError()
+        self.set = set()
 
     def exists(self, state):
         """
@@ -15,7 +15,8 @@ class Explored(object):
         :param state:  Hashable problem state
         :return: True if already seen, False otherwise4
         """
-        raise NotImplementedError()
+        return self.set.__contains__(state)
+
 
     def add(self, state):
         """
@@ -23,6 +24,5 @@ class Explored(object):
         :param state:  A problem state that is hashable, e.g. a tuple
         :return: None
         """
-
-        raise NotImplementedError()
+        self.set.add(state)
 
