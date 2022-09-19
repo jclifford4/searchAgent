@@ -245,14 +245,19 @@ class DepthFirstSearch:
         Fill in appropriate comments
         """
         # print(node.state[0])
+        if (node.get_depth() == 0):
+            return 0
+
         return -node.get_depth()
+
 
     @classmethod
     def h(cls, node: SearchNode, problem):
         """
         Fill in appropriate comments
         """
-        return 0
+
+        return -node.get_depth()
 
     @classmethod
     def search(cls, problem):
