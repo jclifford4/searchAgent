@@ -4,7 +4,7 @@
 # educational purposes provided that (1) you do not distribute or publish
 # solutions, (2) you retain this notice, and (3) you provide clear
 # attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
-# 
+#
 # Attribution Information: The Pacman AI projects were developed at UC Berkeley.
 # The core projects and autograders were primarily created by John DeNero
 # (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
@@ -65,10 +65,12 @@ class SearchProblem:
         """
         util.raiseNotDefined()
 
+
 class SearchNode:
     """
     Node in a search graph/tree
     """
+
     def __init__(self, problem, state, parent, action, g_fn, h_fn):
         """
         Create a new search state
@@ -167,7 +169,7 @@ def graph_search(problem, g, h, verbose=False, debug=False):
     # sorted using one of the getter functions provided in SearchNode
 
     startNode = SearchNode(problem, problem.startState, None, None, g, h)
-    startNode.state = (problem.startState, None, None)
+    # startNode.state = ((problem.startState[0], problem.startState[1]), None, None)
     # q
     frontier = util.PriorityQueue()
     # add startNode to q
@@ -181,29 +183,28 @@ def graph_search(problem, g, h, verbose=False, debug=False):
 
     # while we are not done...
     while not done:
-        currentNode = frontier.pop()        # pop first item off the q
-        explored.add(currentNode.state[0])     # mark it as explored
-
-        successors = problem.getSuccessors(currentNode.state[0])       # get its successors(its child nodes)
+        currentNode = frontier.pop()  # pop first item off the q
+        explored.add(currentNode.state)  # mark it as explored
+        a = currentNode
+        b = currentNode.state
+        successors = problem.getSuccessors(currentNode.state)  # get its successors(its child nodes)
 
         # For every successor node of current node...
         for successor in successors:
 
-
             # child node is a new SearchNode(problem, parent, curState,  action, g, h)
-            child = SearchNode(problem, successor, currentNode, successor[1], g, h)
-
+            child = SearchNode(problem, successor[0], currentNode, successor[1], g, h)
+            d = child.state
             # if child state hasn't been explored...
-            if child.state[0] not in explored:
+            if child.state not in explored:
                 # if child is the goal state...
-                if problem.isGoalState(child.state[0]):
+                if problem.isGoalState(child.state):
                     done = found = True
                     action = child.action
                     # actions = []    # empty list of actions.
 
                     # back track the path and append to actions list
                     while child.parent != None:
-
                         actions.append(child.action)
                         child = child.parent
                     return actions
@@ -211,14 +212,6 @@ def graph_search(problem, g, h, verbose=False, debug=False):
                     frontier.push(child, child.g + child.h)
 
     return None
-
-
-
-
-
-
-
-
 
 
 def tinyMazeSearch(problem):
@@ -229,7 +222,8 @@ def tinyMazeSearch(problem):
     from game import Directions
     s = Directions.SOUTH
     w = Directions.WEST
-    return  [s, s, w, s, w, w, s, w]
+    return [s, s, w, s, w, w, s, w]
+
 
 class DepthFirstSearch:
     """
@@ -241,6 +235,7 @@ class DepthFirstSearch:
 
 
     """
+
     # The @classmethod decorator indicates that the next function to be defined
     # is a class function.  By tradition, the first argument to a class method is
     # cls (much like self is the first argument to instance methods)
@@ -249,6 +244,7 @@ class DepthFirstSearch:
         """
         Fill in appropriate comments
         """
+        # print(node.state[0])
         return -node.get_depth()
 
     @classmethod
@@ -258,13 +254,12 @@ class DepthFirstSearch:
         """
         return 0
 
-
     @classmethod
     def search(cls, problem):
-
-        path = graph_search(problem,DepthFirstSearch.g,DepthFirstSearch.h, True, True)
+        path = graph_search(problem, DepthFirstSearch.g, DepthFirstSearch.h, True, True)
         path.reverse()
         return path
+
 
 def depthFirstSearch(problem):
     """
@@ -276,10 +271,12 @@ def depthFirstSearch(problem):
     """
     return DepthFirstSearch.search(problem)
 
+
 class BreadthFirstSearch:
     """
     Expand the search tree level by level
     """
+
     # Hint:  Start by setting up signatures even if you don't implement right away.
     # Python cannot compile this moudule until BFS and A* classes have at least a dummy search signature.
     # Use signatures from DepthFirstSearch
@@ -290,7 +287,6 @@ class BreadthFirstSearch:
         Fill in appropriate comments
         """
 
-
         return node.get_depth()
 
     @classmethod
@@ -299,8 +295,7 @@ class BreadthFirstSearch:
         Fill in appropriate comments
         """
 
-
-        return nullHeuristic(problem)
+        return 0
 
     @classmethod
     def search(cls, problem):
@@ -311,8 +306,6 @@ class BreadthFirstSearch:
         path = graph_search(problem, BreadthFirstSearch.g, BreadthFirstSearch.h, True, True)
         path.reverse()
         return path
-
-
 
 
 def breadthFirstSearch(problem):
@@ -330,6 +323,7 @@ class AStarSearch:
     """
     Expand the search tree based on a consistent heuristic
     """
+
     # Use signatures from DepthFirstSearch
     @classmethod
     def g(cls, node: SearchNode):
@@ -343,16 +337,24 @@ class AStarSearch:
         """
         Fill in appropriate comments
         """
-        if node.state == problem.startState:
-            start = node.state
-        else:
-            start = node.state[0]
-        end = problem.goal
-        euclidean = util.manhattanDistance(end, start)
+        curState = node.state
+        # if node.state == problem.startState:
+        #     start = node.state
+        #     print("From if: {0}".format(start))
+        # else:
+        #     start = node.state[0]
+        #     print("From else: {0}".format(start))
+        # end = problem.goal
+        # euclidean = util.manhattanDistance(end, start)
         # euclidean.append(abs(math.sqrt((end[0] - start[0])**2 + math.sqrt((end[1] - start[1])**2))))
         # euclidean.append(util.manhattanDistance(start, end))
+        # i = 0
+        # print(euclidean)
+        # print(problem.goal[0])
+        # print(type(start))
+        dist = ((problem.goal[0] - curState[0]) ** 2 + (problem.goal[1] - curState[1]) ** 2) ** 0.5
 
-        return euclidean
+        return dist
 
     @classmethod
     def search(cls, problem):
@@ -362,6 +364,7 @@ class AStarSearch:
         path = graph_search(problem, AStarSearch.g, AStarSearch.h, False, False)
         path.reverse()
         return path
+
 
 def aStarSearch(problem):
     """
@@ -375,12 +378,14 @@ def aStarSearch(problem):
     """
     return AStarSearch.search(problem)
 
+
 def nullHeuristic(state, problem=None):
     """
     A heuristic function estimates the cost from the current state to the nearest
     goal in the provided SearchProblem.  This heuristic is trivial.
     """
     return 0
+
 
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
