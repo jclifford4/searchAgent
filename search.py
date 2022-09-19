@@ -16,6 +16,7 @@
 In search.py, you will implement generic search algorithms which are called by
 Pacman agents (in searchAgents.py).
 """
+import math
 from collections.abc import Callable
 
 import pacman
@@ -338,21 +339,32 @@ class AStarSearch:
         """
         Fill in appropriate comments
         """
-        raise NotImplementedError()
+        return node.depth
 
     @classmethod
     def h(cls, node: SearchNode, problem):
         """
         Fill in appropriate comments
         """
-        raise NotImplementedError()
+        if (node.state == problem.startState):
+            start = node.state
+        else:
+            start = node.state[0]
+        end = problem.goal
+        euclidean = abs(math.sqrt((math.pow(2, end[0]-start[0]) + (math.pow(2, end[1]-start[1])))))
+        print(euclidean)
+
+
+        return euclidean
 
     @classmethod
     def search(cls, problem):
         """
         Fill in appropriate comments
         """
-        raise NotImplementedError()
+        path = graph_search(problem, AStarSearch.g, AStarSearch.h, False, False)
+        path.reverse()
+        return path
 
 def aStarSearch(problem):
     """
