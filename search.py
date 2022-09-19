@@ -17,10 +17,8 @@ In search.py, you will implement generic search algorithms which are called by
 Pacman agents (in searchAgents.py).
 """
 import math
-from collections.abc import Callable
 
-import pacman
-import searchAgents
+import pacmanAgents
 import util  # util.PriorityQueueWithFunction will be useful to you
 from explored import Explored
 
@@ -212,7 +210,6 @@ def graph_search(problem, g, h, verbose=False, debug=False):
                 else:
                     frontier.push(child, child.g + child.h)
 
-
     return None
 
 
@@ -252,22 +249,22 @@ class DepthFirstSearch:
         """
         Fill in appropriate comments
         """
-        raise NotImplementedError()
+        return -node.get_depth()
 
     @classmethod
     def h(cls, node: SearchNode, problem):
         """
         Fill in appropriate comments
         """
-        raise NotImplementedError()
+        return 0
 
 
     @classmethod
     def search(cls, problem):
-        """
-        Fill in appropriate comments
-        """
-        raise NotImplementedError()
+
+        path = graph_search(problem,DepthFirstSearch.g,DepthFirstSearch.h, True, True)
+        path.reverse()
+        return path
 
 def depthFirstSearch(problem):
     """
@@ -346,14 +343,14 @@ class AStarSearch:
         """
         Fill in appropriate comments
         """
-        if (node.state == problem.startState):
+        if node.state == problem.startState:
             start = node.state
         else:
             start = node.state[0]
         end = problem.goal
-        euclidean = abs(math.sqrt((math.pow(2, end[0]-start[0]) + (math.pow(2, end[1]-start[1])))))
-        print(euclidean)
-
+        euclidean = util.manhattanDistance(end, start)
+        # euclidean.append(abs(math.sqrt((end[0] - start[0])**2 + math.sqrt((end[1] - start[1])**2))))
+        # euclidean.append(util.manhattanDistance(start, end))
 
         return euclidean
 
