@@ -171,28 +171,19 @@ def graph_search(problem, g, h, verbose=False, debug=False):
     # sorted using one of the getter functions provided in SearchNode
 
     startNode = SearchNode(problem, problem.startState, None, None, g, h)
-    # startNode.state = ((problem.startState[0], problem.startState[1]), None, None)
-    # q
+
+    # Frontier queue
     frontier = util.PriorityQueue()
     # add startNode to q
     frontier.push(startNode, startNode.g + startNode.h)
 
     done = found = False
-    # initialize empty explored set
+    # initialize empty explored set.
     explored = Explored().set
-    lost_set = Explored().set
+    # an empty list of actions.
+    # actions = []
 
-    # explored.add(problem)
-    gs = problem.goal
-    actions = []
-    lay  = layout.getLayout("mediumMaze")
-    # print(str(sys.argv[6]))
-    # for i in range(len(sys.argv)):
-    #     print(sys.argv[i])
-    # print(len(sys.argv))
-    # if (sys.argv[3] == 'mediumMaze' and sys.argv[7] == 'search_fn=depthFirstSearch'):
-    #     explored.add((32, 3))
-    #     explored.add((31, 3))
+
 
 
     # while we are not done...
@@ -201,8 +192,6 @@ def graph_search(problem, g, h, verbose=False, debug=False):
         currentNode = frontier.pop()  # pop first item off the q
         explored.add(currentNode.state)  # mark it as explored
 
-        a = currentNode
-        b = currentNode.state
         successors = problem.getSuccessors(currentNode.state)  # get its successors(its child nodes)
 
 
@@ -211,7 +200,7 @@ def graph_search(problem, g, h, verbose=False, debug=False):
 
             # child node is a new SearchNode(problem, parent, curState,  action, g, h)
             child = SearchNode(problem, successor[0], currentNode, successor[1], g, h)
-            d = child.state
+
             # if child state hasn't been explored...
             if child.state not in explored:
                 # if child is the goal state...
@@ -219,15 +208,16 @@ def graph_search(problem, g, h, verbose=False, debug=False):
                 if problem.isGoalState(child.state):
                     done = found = True
                     action = child.action
-                    # actions = []    # empty list of actions.
+                    actions = []    # empty list of actions.
 
                     # back track the path and append to actions list
                     while child.parent != None:
-                        # print("State {0}, Action: {1}".format(child.state, child.action))
+
                         actions.append(child.action)
                         child = child.parent
-                        # print(child.g + child.h)=
+
                     return actions
+                # Otherwise, put the node into the frontier queue
                 else:
                     frontier.push(child, child.g + child.h)
 
@@ -262,26 +252,25 @@ class DepthFirstSearch:
     @classmethod
     def g(cls, node: SearchNode):
         """
-        Fill in appropriate comments
+        The cost function is simply zero.
         """
-        # print(node.state[0])
         return 0
 
 
     @classmethod
     def h(cls, node: SearchNode, problem):
         """
-        Fill in appropriate comments
+        Heuristic is the negative depth of the current node
         """
-
-
         return -node.depth
 
     @classmethod
     def search(cls, problem):
+
+        # Result list of the path
         path = graph_search(problem, DepthFirstSearch.g, DepthFirstSearch.h, True, True)
-        path.reverse()
-        print(path)
+        path.reverse()      # Reverse the path
+
         return path
 
 
@@ -308,7 +297,7 @@ class BreadthFirstSearch:
     @classmethod
     def g(cls, node: SearchNode):
         """
-        Fill in appropriate comments
+        Each step cost is the depth of the node, in the graph.
         """
 
         return node.get_depth()
@@ -316,7 +305,7 @@ class BreadthFirstSearch:
     @classmethod
     def h(cls, node: SearchNode, problem):
         """
-        Fill in appropriate comments
+        BFS heuristic is simply 0.
         """
 
         return 0
@@ -324,11 +313,12 @@ class BreadthFirstSearch:
     @classmethod
     def search(cls, problem):
         """
-        Fill in appropriate comments
+        Call the graph function, with the BFS cost and heuristic functions.
         """
-
+        # Result path from the graph call
         path = graph_search(problem, BreadthFirstSearch.g, BreadthFirstSearch.h, True, True)
-        path.reverse()
+        path.reverse()      # Reverse the path
+
         return path
 
 
@@ -352,14 +342,14 @@ class AStarSearch:
     @classmethod
     def g(cls, node: SearchNode):
         """
-        Fill in appropriate comments
+        The Cost is the depth of the node.
         """
         return node.depth
 
     @classmethod
     def h(cls, node: SearchNode, problem):
         """
-        Fill in appropriate comments
+        Heurisitc is the Euclidean distance from current node to goal state
         """
         curState = node.state
         dist = ((problem.goal[0] - curState[0]) ** 2 + (problem.goal[1] - curState[1]) ** 2) ** 0.5
@@ -371,8 +361,10 @@ class AStarSearch:
         """
         Fill in appropriate comments
         """
+        # result list of actions from the graph call.
         path = graph_search(problem, AStarSearch.g, AStarSearch.h, False, False)
-        path.reverse()
+        path.reverse()      # Reverse the path.
+
         return path
 
 
