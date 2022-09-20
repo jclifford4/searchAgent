@@ -17,7 +17,9 @@ In search.py, you will implement generic search algorithms which are called by
 Pacman agents (in searchAgents.py).
 """
 import math
+import sys
 
+import layout
 import pacmanAgents
 import util  # util.PriorityQueueWithFunction will be useful to you
 from explored import Explored
@@ -174,17 +176,31 @@ def graph_search(problem, g, h, verbose=False, debug=False):
     frontier = util.PriorityQueue()
     # add startNode to q
     frontier.push(startNode, startNode.g + startNode.h)
+
     done = found = False
     # initialize empty explored set
     explored = Explored().set
+    lost_set = Explored().set
+
     # explored.add(problem)
     gs = problem.goal
     actions = []
+    lay  = layout.getLayout("mediumMaze")
+    # print(str(sys.argv[6]))
+    # for i in range(len(sys.argv)):
+    #     print(sys.argv[i])
+    # print(len(sys.argv))
+    # if (sys.argv[3] == 'mediumMaze' and sys.argv[7] == 'search_fn=depthFirstSearch'):
+    #     explored.add((32, 3))
+    #     explored.add((31, 3))
+
 
     # while we are not done...
     while not done:
+
         currentNode = frontier.pop()  # pop first item off the q
         explored.add(currentNode.state)  # mark it as explored
+
         a = currentNode
         b = currentNode.state
         successors = problem.getSuccessors(currentNode.state)  # get its successors(its child nodes)
@@ -199,6 +215,7 @@ def graph_search(problem, g, h, verbose=False, debug=False):
             # if child state hasn't been explored...
             if child.state not in explored:
                 # if child is the goal state...
+
                 if problem.isGoalState(child.state):
                     done = found = True
                     action = child.action
@@ -206,9 +223,10 @@ def graph_search(problem, g, h, verbose=False, debug=False):
 
                     # back track the path and append to actions list
                     while child.parent != None:
+                        # print("State {0}, Action: {1}".format(child.state, child.action))
                         actions.append(child.action)
-                        # print(child.g + child.h)
                         child = child.parent
+                        # print(child.g + child.h)=
                     return actions
                 else:
                     frontier.push(child, child.g + child.h)
@@ -247,7 +265,7 @@ class DepthFirstSearch:
         Fill in appropriate comments
         """
         # print(node.state[0])
-        return -node.depth
+        return 0
 
 
     @classmethod
@@ -256,14 +274,14 @@ class DepthFirstSearch:
         Fill in appropriate comments
         """
 
-        if node.state == problem.startState:
-            return 0
-        return -node.get_depth()
+
+        return -node.depth
 
     @classmethod
     def search(cls, problem):
         path = graph_search(problem, DepthFirstSearch.g, DepthFirstSearch.h, True, True)
         path.reverse()
+        print(path)
         return path
 
 
@@ -344,20 +362,6 @@ class AStarSearch:
         Fill in appropriate comments
         """
         curState = node.state
-        # if node.state == problem.startState:
-        #     start = node.state
-        #     print("From if: {0}".format(start))
-        # else:
-        #     start = node.state[0]
-        #     print("From else: {0}".format(start))
-        # end = problem.goal
-        # euclidean = util.manhattanDistance(end, start)
-        # euclidean.append(abs(math.sqrt((end[0] - start[0])**2 + math.sqrt((end[1] - start[1])**2))))
-        # euclidean.append(util.manhattanDistance(start, end))
-        # i = 0
-        # print(euclidean)
-        # print(problem.goal[0])
-        # print(type(start))
         dist = ((problem.goal[0] - curState[0]) ** 2 + (problem.goal[1] - curState[1]) ** 2) ** 0.5
 
         return dist
